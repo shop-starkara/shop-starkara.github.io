@@ -1,0 +1,139 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Starkara | Everyday Essentials</title>
+<meta name="description" content="Shop household essentials, water bottles and kitchen accessories at Starkara.">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f7f7f7;color:#222}
+header{background:#111;color:white;padding:20px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{font-size:27px;font-weight:800;letter-spacing:1px}
+.logo span{color:#d6ad60}
+header a{color:white;text-decoration:none}
+.hero{padding:42px 6%;background:#eee5d6;text-align:center}
+.hero h1{font-size:32px;margin-bottom:12px}
+.hero p{color:#555;margin-bottom:20px;line-height:1.6}
+.btn{display:inline-block;background:#111;color:white;padding:12px 20px;border-radius:6px;text-decoration:none;border:none;cursor:pointer}
+.section{padding:30px 5%}
+.section h2{margin-bottom:20px;font-size:24px}
+.categories{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:25px}
+.category{background:white;border:1px solid #ddd;border-radius:25px;padding:10px 15px;cursor:pointer}
+.category.active{background:#111;color:white}
+.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.product{background:white;border-radius:10px;overflow:hidden;border:1px solid #eee}
+.product-image{height:135px;background:#f0eee9;display:flex;align-items:center;justify-content:center;font-size:55px}
+.product-info{padding:13px}
+.product h3{font-size:15px;margin-bottom:8px}
+.price{font-size:18px;font-weight:bold;margin-bottom:12px}
+.product button{width:100%}
+.notice{background:#fff;padding:20px;border-radius:8px;line-height:1.8}
+footer{background:#111;color:#ddd;text-align:center;padding:25px 15px;line-height:2}
+footer a{color:#e2bd75}
+@media(min-width:650px){
+ .hero{padding:65px 10%}
+ .hero h1{font-size:44px}
+ .products{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+ .product-image{height:180px}
+ .section{padding:40px 7%}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">STARK<span>ARA</span></div>
+  <a href="#products">Shop Now 🛍️</a>
+</header>
+
+<section class="hero">
+  <h1>Everyday Essentials,<br>Made Simple.</h1>
+  <p>Discover useful products for your home, kitchen and everyday life.</p>
+  <a class="btn" href="#products">Explore Products</a>
+</section>
+
+<section class="section" id="products">
+  <h2>Shop Our Collection</h2>
+  <div class="categories">
+    <button class="category active" onclick="filterProducts('All',this)">All</button>
+    <button class="category" onclick="filterProducts('Kitchen',this)">Kitchen</button>
+    <button class="category" onclick="filterProducts('Bottles',this)">Bottles</button>
+    <button class="category" onclick="filterProducts('Home',this)">Home Essentials</button>
+  </div>
+  <div class="products" id="product-list"></div>
+</section>
+
+<section class="section">
+  <div class="notice">
+    <h2>Why Shop with Starkara?</h2>
+    ✅ Useful everyday products<br>
+    ✅ Easy WhatsApp ordering<br>
+    ✅ Personal assistance before ordering<br>
+    🚚 Delivery charges and availability confirmed on WhatsApp
+  </div>
+</section>
+
+<footer>
+  <strong>STARKARA</strong><br>
+  Your Everyday Shopping Store<br>
+  <a id="contact-link" href="#" target="_blank">Contact Us on WhatsApp</a><br>
+  <small>© 2026 Starkara. All rights reserved.</small>
+</footer>
+
+<script>
+/* IMPORTANT: Replace this with your WhatsApp number.
+   Use country code + number, without + or spaces.
+   Example: 919876543210 */
+const WHATSAPP_NUMBER = "916352076293";
+
+const products = [
+  {name:"Everyday Water Bottle",price:199,category:"Bottles",emoji:"🧴"},
+  {name:"Kitchen Storage Container",price:149,category:"Kitchen",emoji:"🥣"},
+  {name:"Lunch Box",price:249,category:"Kitchen",emoji:"🍱"},
+  {name:"Home Storage Organizer",price:299,category:"Home",emoji:"🧺"},
+  {name:"Kitchen Essentials Set",price:349,category:"Kitchen",emoji:"🍽️"},
+  {name:"Daily Use Bottle",price:129,category:"Bottles",emoji:"🚰"},
+  {name:"Home Cleaning Brush",price:99,category:"Home",emoji:"🧹"},
+  {name:"Multipurpose Storage Box",price:199,category:"Home",emoji:"📦"}
+];
+
+function orderProduct(name,price){
+  if(!/^\d{10,15}$/.test(916352076293) || WHATSAPP_NUMBER.includes("916352076293")){
+    alert("WhatsApp setup baki chhe. Code ma WHATSAPP_NUMBER ni jagyae tamaro number nakho.");
+    return;
+  }
+  const message = `Hello Starkara! I want to order:\nProduct: ${name}\nPrice: ₹${price}\nPlease confirm availability and delivery charges.`;
+  window.open("https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(message),"_blank");
+}
+
+function filterProducts(category,button){
+  document.querySelectorAll(".category").forEach(b=>b.classList.remove("active"));
+  button.classList.add("active");
+  renderProducts(category);
+}
+
+function renderProducts(category="All"){
+  const list=document.getElementById("product-list");
+  const filtered=products.filter(p=>category==="All"||p.category===category);
+  list.innerHTML=filtered.map(p=>`
+    <article class="product">
+      <div class="product-image">${p.emoji}</div>
+      <div class="product-info">
+        <h3>${p.name}</h3>
+        <div class="price">₹${p.price}</div>
+        <button class="btn" onclick="orderProduct('${p.name}',${p.price})">Order on WhatsApp</button>
+      </div>
+    </article>
+  `).join("");
+}
+
+document.getElementById("contact-link").href=
+  "https://wa.me/"+916352076293;
+renderProducts();
+</script>
+
+</body>
+</html>
+```
