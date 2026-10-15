@@ -4,43 +4,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Shop household essentials, kitchen accessories and water bottles at Starkara.">
-<title>Starkara | Everyday Essentials</title>
+<title>Starkara | Online Shopping</title>
+<meta name="description" content="Shop everyday household products with Starkara.">
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
 body{font-family:Arial,sans-serif;background:#f7f7f7;color:#222}
-header{background:#111;color:white;padding:20px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.logo{font-size:27px;font-weight:800;letter-spacing:1px}
+header{background:#111;color:#fff;padding:20px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:27px;font-weight:bold;letter-spacing:1px}
 .logo span{color:#d6ad60}
 header a{color:white;text-decoration:none}
-.hero{padding:42px 6%;background:#eee5d6;text-align:center}
-.hero h1{font-size:32px;line-height:1.3;margin-bottom:12px}
-.hero p{color:#555;margin-bottom:20px;line-height:1.6}
-.btn{display:inline-block;background:#111;color:white;padding:12px 16px;border-radius:6px;text-decoration:none;border:none;cursor:pointer}
-.btn:hover{background:#333}
-.section{padding:30px 5%}
-.section h2{margin-bottom:20px;font-size:24px}
-.categories{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:25px}
-.category{background:white;border:1px solid #ddd;border-radius:25px;padding:10px 15px;cursor:pointer}
+.hero{background:#eee5d6;text-align:center;padding:45px 20px}
+.hero h1{font-size:32px;margin-bottom:12px}
+.hero p{line-height:1.6;margin-bottom:20px;color:#555}
+.btn{display:block;background:#111;color:white;text-align:center;padding:12px;border:0;border-radius:6px;text-decoration:none;cursor:pointer;width:100%;font-size:14px}
+.shop-btn{display:inline-block;width:auto;padding:12px 22px}
+.section{padding:28px 5%}
+.section h2{margin-bottom:20px}
+.categories{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.category{border:1px solid #ddd;background:#fff;padding:10px 14px;border-radius:22px;cursor:pointer}
 .category.active{background:#111;color:white}
-.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-.product{background:white;border-radius:10px;overflow:hidden;border:1px solid #eee}
-.product-image{height:140px;background:#f0eee9;display:flex;align-items:center;justify-content:center;font-size:55px}
-.product-info{padding:13px}
-.product h3{font-size:15px;line-height:1.4;min-height:40px;margin-bottom:8px}
+.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.product{background:white;border:1px solid #eee;border-radius:9px;overflow:hidden}
+.product-image{height:125px;background:#f0eee9;display:flex;align-items:center;justify-content:center;font-size:48px}
+.product-info{padding:12px}
+.product h3{font-size:14px;line-height:1.4;min-height:40px;margin-bottom:8px}
 .price{font-size:18px;font-weight:bold;margin-bottom:12px}
-.product button{width:100%;font-size:13px}
-.notice{background:white;padding:20px;border-radius:8px;line-height:1.9}
-footer{background:#111;color:#ddd;text-align:center;padding:25px 15px;line-height:2}
-footer a{color:#e2bd75}
+.info{background:#fff;padding:20px;border-radius:8px;line-height:2}
+footer{background:#111;color:white;text-align:center;padding:25px 15px;line-height:2}
+footer a{color:#e3bd76}
 @media(min-width:650px){
-.hero{padding:65px 10%}
+.hero{padding:65px 20px}
 .hero h1{font-size:44px}
-.products{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
-.product-image{height:180px}
-.section{padding:40px 7%}
+.products{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.product-image{height:175px}
 }
 </style>
 </head>
@@ -54,38 +51,38 @@ footer a{color:#e2bd75}
 
 <section class="hero">
   <h1>Everyday Essentials,<br>Made Simple.</h1>
-  <p>Discover useful products for your home, kitchen and everyday life.</p>
-  <a class="btn" href="#products">Explore Products</a>
+  <p>Discover household products, kitchen accessories and water bottles.</p>
+  <a class="btn shop-btn" href="#products">Explore Products</a>
 </section>
 
 <section class="section" id="products">
-  <h2>Shop Our Collection</h2>
+  <h2>Our Products</h2>
 
   <div class="categories">
-    <button class="category active" onclick="filterProducts('All',this)">All</button>
-    <button class="category" onclick="filterProducts('Kitchen',this)">Kitchen</button>
-    <button class="category" onclick="filterProducts('Bottles',this)">Bottles</button>
-    <button class="category" onclick="filterProducts('Home',this)">Home Essentials</button>
+    <button class="category active" onclick="showProducts('All',this)">All</button>
+    <button class="category" onclick="showProducts('Kitchen',this)">Kitchen</button>
+    <button class="category" onclick="showProducts('Bottles',this)">Bottles</button>
+    <button class="category" onclick="showProducts('Home',this)">Home</button>
   </div>
 
   <div class="products" id="product-list"></div>
 </section>
 
 <section class="section">
-  <div class="notice">
-    <h2>Why Shop with Starkara?</h2>
-    <p>✅ Useful everyday products</p>
-    <p>✅ Easy WhatsApp ordering</p>
-    <p>✅ Personal assistance before ordering</p>
-    <p>🚚 Delivery charges and availability confirmed on WhatsApp</p>
+  <div class="info">
+    <h2>Why Starkara?</h2>
+    <p>✅ Everyday useful products</p>
+    <p>✅ Order directly through WhatsApp</p>
+    <p>✅ Confirm product availability with us</p>
+    <p>🚚 Delivery charges confirmed before ordering</p>
   </div>
 </section>
 
 <footer>
   <strong>STARKARA</strong><br>
   Your Everyday Shopping Store<br>
-  <a href="https://wa.me/916352076293" target="_blank" rel="noopener">Contact Us on WhatsApp</a><br>
-  <small>© 2026 Starkara. All rights reserved.</small>
+  <a href="https://wa.me/916352076293" target="_blank" rel="noopener">Chat with us on WhatsApp</a><br>
+  <small>© 2026 Starkara</small>
 </footer>
 
 <script>
@@ -102,7 +99,7 @@ const products = [
   {name:"Multipurpose Storage Box",price:199,category:"Home",emoji:"📦"}
 ];
 
-function orderProduct(name, price) {
+function orderProduct(name,price){
   const message =
     "Hello Starkara! I want to order:\n" +
     "Product: " + name + "\n" +
@@ -110,38 +107,34 @@ function orderProduct(name, price) {
     "Please confirm availability and delivery charges.";
 
   const url =
-    "https://api.whatsapp.com/send?phone=" +
-    WHATSAPP_NUMBER +
-    "&text=" +
-    encodeURIComponent(message);
+    "https://wa.me/" + WHATSAPP_NUMBER +
+    "?text=" + encodeURIComponent(message);
 
-  window.open(url, "_blank");
+  window.location.href = url;
 }
 
-function filterProducts(category, button) {
-  document.querySelectorAll(".category").forEach(function(item) {
-    item.classList.remove("active");
+function showProducts(category,button){
+  document.querySelectorAll(".category").forEach(function(b){
+    b.classList.remove("active");
   });
-
   button.classList.add("active");
   renderProducts(category);
 }
 
-function renderProducts(category = "All") {
-  const list = document.getElementById("product-list");
-
-  const filtered = products.filter(function(product) {
-    return category === "All" || product.category === category;
+function renderProducts(category="All"){
+  const list=document.getElementById("product-list");
+  const filtered=products.filter(function(p){
+    return category==="All" || p.category===category;
   });
 
-  list.innerHTML = filtered.map(function(product) {
+  list.innerHTML=filtered.map(function(p,index){
     return `
       <article class="product">
-        <div class="product-image">${product.emoji}</div>
+        <div class="product-image">${p.emoji}</div>
         <div class="product-info">
-          <h3>${product.name}</h3>
-          <div class="price">₹${product.price}</div>
-          <button class="btn" onclick="orderProduct('${product.name}',${product.price})">
+          <h3>${p.name}</h3>
+          <div class="price">₹${p.price}</div>
+          <button class="btn" onclick="orderProduct(products[${products.indexOf(p)}].name,products[${products.indexOf(p)}].price)">
             Order on WhatsApp
           </button>
         </div>
@@ -151,8 +144,8 @@ function renderProducts(category = "All") {
 }
 
 renderProducts();
-
 </script>
+
 </body>
 </html>
 ```
