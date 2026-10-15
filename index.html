@@ -100,9 +100,24 @@ const products = [
 ];
 
 function orderProduct(name,price){
-  if(!/^\d{10,15}$/.test(916352076293) || WHATSAPP_NUMBER.includes("916352076293")){
-    alert("const WHATSAPP_NUMBER = "916352076293";");
-    return;
+  ```javascript
+  const number = "916352076293";
+
+  const message =
+    "Hello Starkara! I want to order:\n" +
+    "Product: " + name + "\n" +
+    "Price: ₹" + price + "\n" +
+    "Please confirm availability and delivery charges.";
+
+  const url =
+    "https://api.whatsapp.com/send?phone=" +
+    number +
+    "&text=" +
+    encodeURIComponent(message);
+
+  window.open(url, "_blank");
+}
+```
   }
   const message = `Hello Starkara! I want to order:\nProduct: ${name}\nPrice: ₹${price}\nPlease confirm availability and delivery charges.`;
   window.open("https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(message),"_blank");
