@@ -102,6 +102,53 @@
     footer { background: #111; color: #eee; padding: 28px 5%; line-height: 1.8; margin-top: 35px; }
     footer a { color: var(--gold); }
     .empty { color: #777; padding: 12px 0; }
+
+    .product { cursor: pointer; transition: transform .18s ease, box-shadow .18s ease; }
+    .product:hover { transform: translateY(-3px); box-shadow: 0 8px 24px #00000010; }
+    .product:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+    .product .product-info button { position: relative; z-index: 1; }
+    .details-modal {
+      display: none; position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,.68); padding: 18px; overflow-y: auto;
+      align-items: center; justify-content: center;
+    }
+    .details-modal.open { display: flex; }
+    .details-card {
+      position: relative; background: #fff; color: var(--text);
+      width: min(900px, 100%); max-height: 92vh; overflow-y: auto;
+      border-radius: 16px; padding: 24px; box-shadow: 0 20px 60px #0005;
+    }
+    .modal-close {
+      position: sticky; top: 0; float: right; z-index: 2;
+      width: 40px; height: 40px; padding: 0; border-radius: 50%;
+      background: #111; color: #fff; font-size: 22px;
+    }
+    .details-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; clear: both; }
+    .gallery-main {
+      width: 100%; aspect-ratio: 1/1; object-fit: contain;
+      background: #f7f7f7; border-radius: 12px; border: 1px solid #eee;
+    }
+    .gallery-thumbs { display: flex; gap: 9px; margin-top: 10px; flex-wrap: wrap; }
+    .gallery-thumb {
+      width: 68px; height: 68px; padding: 3px; border: 2px solid #eee;
+      border-radius: 8px; background: white; overflow: hidden;
+    }
+    .gallery-thumb.active { border-color: var(--gold); }
+    .gallery-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .details-copy h2 { margin: 4px 0 10px; font-size: 27px; }
+    .details-price { font-size: 27px; font-weight: 800; margin: 14px 0; }
+    .details-description { line-height: 1.7; color: #555; }
+    .details-meta { color: #777; font-size: 13px; margin: 8px 0; }
+    .details-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+    .details-actions button { flex: 1; min-width: 145px; }
+    body.modal-open { overflow: hidden; }
+    @media(max-width:650px) {
+      .details-card { padding: 16px; }
+      .details-layout { grid-template-columns: 1fr; gap: 18px; }
+      .details-copy h2 { font-size: 23px; }
+      .gallery-main { max-height: 42vh; }
+    }
+
     @media(max-width:850px) { .grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
     @media(max-width:480px) {
       .grid { gap: 10px; }
@@ -206,6 +253,30 @@
   </section>
 </main>
 
+
+<div class="details-modal" id="productModal" role="dialog" aria-modal="true" aria-labelledby="detailName" aria-hidden="true">
+  <div class="details-card">
+    <button class="modal-close" type="button" onclick="closeProduct()" aria-label="Close product details">×</button>
+    <div class="details-layout">
+      <div>
+        <img id="detailMainImage" class="gallery-main" src="" alt="Product photo">
+        <div id="detailThumbs" class="gallery-thumbs" aria-label="More product photos"></div>
+      </div>
+      <div class="details-copy">
+        <div class="demo" id="detailCategory">Product</div>
+        <h2 id="detailName">Product name</h2>
+        <div class="details-price" id="detailPrice">₹0</div>
+        <div class="details-meta">Demo catalogue · Please confirm final price and availability</div>
+        <p class="details-description" id="detailDescription"></p>
+        <div class="details-actions">
+          <button class="gold" id="detailAddButton" type="button">Add to Cart</button>
+          <button class="dark" id="detailAskButton" type="button">Ask on WhatsApp</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <footer>
   <div class="brand">STARKARA</div>
   <p>દરેક ઘર માટે, વિશ્વાસ સાથે.</p>
@@ -220,14 +291,38 @@
 
   // DEMO catalogue: replace names, prices and images with verified product details.
   const products = [
-    {id:1,name:"Everyday Water Bottle",cat:"Bottles",price:199,img:"https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=600&q=80"},
-    {id:2,name:"Kitchen Storage Container",cat:"Kitchen",price:149,img:"https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=600&q=80"},
-    {id:3,name:"Reusable Lunch Box",cat:"Kitchen",price:249,img:"https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=600&q=80"},
-    {id:4,name:"Home Organiser",cat:"Home",price:299,img:"https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80"},
-    {id:5,name:"Daily Utility Bottle",cat:"Bottles",price:179,img:"https://images.unsplash.com/photo-1523362628745-0c100150b2c5?auto=format&fit=crop&w=600&q=80"},
-    {id:6,name:"Kitchen Essentials Set",cat:"Kitchen",price:349,img:"https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=600&q=80"},
-    {id:7,name:"Home Decor Accessory",cat:"Home",price:399,img:"https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=600&q=80"},
-    {id:8,name:"Everyday Carry Pouch",cat:"Accessories",price:129,img:"https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80"}
+    {id:1,name:"Everyday Water Bottle",cat:"Bottles",price:199,
+     img:"https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=600&q=80",
+     description:"A practical reusable bottle for everyday hydration at home, work or while travelling. Check the actual material, capacity and colour with Starkara before ordering.",
+     gallery:["https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=900&q=85","https://images.unsplash.com/photo-1523362628745-0c100150b2c5?auto=format&fit=crop&w=900&q=85","https://images.unsplash.com/photo-1608270586620-248524c67de9?auto=format&fit=crop&w=900&q=85"]},
+    {id:2,name:"Kitchen Storage Container",cat:"Kitchen",price:149,
+     img:"https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=600&q=80",
+     description:"A storage solution concept for keeping everyday kitchen essentials organised. Confirm size, material, pack contents and colour before purchase.",
+     gallery:["https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=900&q=85","https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=900&q=85","https://images.unsplash.com/photo-1604335399105-a0c585fd81a1?auto=format&fit=crop&w=900&q=85"]},
+    {id:3,name:"Reusable Lunch Box",cat:"Kitchen",price:249,
+     img:"https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=600&q=80",
+     description:"A lunch-time essential concept for carrying meals to work, school or outings. Please ask Starkara to confirm dimensions, compartments and included accessories.",
+     gallery:["https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=85","https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=900&q=85","https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=80"]},
+    {id:4,name:"Home Organiser",cat:"Home",price:299,
+     img:"https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80",
+     description:"A home organisation and decor catalogue item intended to help keep everyday spaces tidy. Ask us to confirm exact dimensions, finish and what is included.",
+     gallery:["https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=900&q=85","https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=900&q=85","https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=900&q=85"]},
+    {id:5,name:"Daily Utility Bottle",cat:"Bottles",price:179,
+     img:"https://images.unsplash.com/photo-1523362628745-0c100150b2c5?auto=format&fit=crop&w=600&q=80",
+     description:"A simple reusable bottle concept for daily use. Confirm capacity, material, available colours and cleaning instructions with Starkara before ordering.",
+     gallery:["https://images.unsplash.com/photo-1523362628745-0c100150b2c5?auto=format&fit=crop&w=900&q=85","https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=900&q=85","https://images.unsplash.com/photo-1608270586620-248524c67de9?auto=format&fit=crop&w=900&q=85"]},
+    {id:6,name:"Kitchen Essentials Set",cat:"Kitchen",price:349,
+     img:"https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=600&q=80",
+     description:"A demo kitchen essentials listing for everyday household needs. The exact pieces, materials and quantity are not verified; contact Starkara for confirmed details.",
+     gallery:["https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=900&q=85","https://images.unsplash.com/photo-1556912167-f556f1f39fdf?auto=format&fit=crop&w=900&q=85","https://images.unsplash.com/photo-1604335399105-a0c585fd81a1?auto=format&fit=crop&w=900&q=85"]},
+    {id:7,name:"Home Decor Accessory",cat:"Home",price:399,
+     img:"https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=600&q=80",
+     description:"A decor inspiration item for living spaces. This is a demo listing; verify the actual product, dimensions, finish and price before placing an order.",
+     gallery:["https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=900&q=85","https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=900&q=85","https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=85"]},
+    {id:8,name:"Everyday Carry Pouch",cat:"Accessories",price:129,
+     img:"https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80",
+     description:"A compact carry accessory concept for everyday essentials. Confirm the actual size, fabric, colour and available stock with Starkara.",
+     gallery:["https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=900&q=85","https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=900&q=85","https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=900&q=85"]}
   ];
 
   let activeCategory = "All";
@@ -255,18 +350,77 @@
     if (sort === "high") list.sort((a,b) => b.price-a.price);
 
     document.getElementById("productGrid").innerHTML = list.length ? list.map(p => `
-      <article class="product">
-        <img src="${p.img}" alt="${safe(p.name)}" loading="lazy"
+      <article class="product" role="button" tabindex="0" aria-label="View details for ${safe(p.name)}"
+        onclick="openProduct(${p.id})"
+        onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openProduct(${p.id})}">
+        <img src="${p.img}" alt="${safe(p.name)} — click to view details" loading="lazy"
              onerror="this.style.display='none'">
         <div class="product-info">
-          <span class="demo">${safe(p.cat)} · Demo item</span>
+          <span class="demo">${safe(p.cat)} · Demo item · Click for details</span>
           <h3>${safe(p.name)}</h3>
           <div class="price">₹${money(p.price)}</div>
-          <button class="gold" onclick="addToCart(${p.id})">Add to Cart</button>
-          <button class="outline" onclick="askProduct(${p.id})">Ask on WhatsApp</button>
+          <button class="gold" onclick="event.stopPropagation();addToCart(${p.id})">Add to Cart</button>
+          <button class="outline" onclick="event.stopPropagation();askProduct(${p.id})">Ask on WhatsApp</button>
         </div>
       </article>`).join("") : '<p class="empty">No products found. Try another search.</p>';
   }
+
+  function openProduct(id) {
+    const p = products.find(item => item.id === Number(id));
+    if (!p) return;
+    document.getElementById("detailCategory").textContent = p.cat + " · Demo item";
+    document.getElementById("detailName").textContent = p.name;
+    document.getElementById("detailPrice").textContent = "₹" + money(p.price);
+    document.getElementById("detailDescription").textContent = p.description || "Contact Starkara for more product details.";
+    const gallery = (p.gallery && p.gallery.length ? p.gallery : [p.img]).slice(0, 6);
+    const mainImage = document.getElementById("detailMainImage");
+    mainImage.src = gallery[0];
+    mainImage.alt = p.name + " product photo 1";
+    document.getElementById("detailThumbs").innerHTML = gallery.map((src, index) =>
+      `<button type="button" class="gallery-thumb ${index === 0 ? "active" : ""}"
+        aria-label="View photo ${index + 1} of ${safe(p.name)}"
+        onclick="selectProductPhoto(${id},${index})">
+        <img src="${src}" alt="" loading="lazy" onerror="this.parentElement.style.display='none'">
+      </button>`
+    ).join("");
+    document.getElementById("detailAddButton").onclick = () => { addToCart(p.id); };
+    document.getElementById("detailAskButton").onclick = () => askProduct(p.id);
+    document.getElementById("productModal").dataset.productId = String(p.id);
+    document.getElementById("productModal").dataset.gallery = JSON.stringify(gallery);
+    const modal = document.getElementById("productModal");
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+    document.querySelector(".modal-close").focus();
+  }
+
+  function selectProductPhoto(productId, index) {
+    const modal = document.getElementById("productModal");
+    if (Number(modal.dataset.productId) !== Number(productId)) return;
+    const gallery = JSON.parse(modal.dataset.gallery || "[]");
+    if (!gallery[index]) return;
+    const p = products.find(item => item.id === Number(productId));
+    const mainImage = document.getElementById("detailMainImage");
+    mainImage.src = gallery[index];
+    mainImage.alt = p.name + " product photo " + (index + 1);
+    document.querySelectorAll(".gallery-thumb").forEach((button, i) =>
+      button.classList.toggle("active", i === index)
+    );
+  }
+
+  function closeProduct() {
+    const modal = document.getElementById("productModal");
+    modal.classList.remove("open");
+    modal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
+  }
+
+  document.getElementById("productModal").addEventListener("click", event => {
+    if (event.target.id === "productModal") closeProduct();
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") closeProduct();
+  });
 
   function addToCart(id) {
     cart[id] = (cart[id] || 0) + 1;
