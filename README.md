@@ -1,2 +1,2 @@
-# shop-starkara.github.io
-Starkara – Your destination for household essentials, water bottles, kitchen accessories, and everyday products. 🛍️
+# shop-starkasa.github.io
+Starkasa – Your destination for household essentials, water bottles, kitchen accessories, and everyday products. 🛍️
